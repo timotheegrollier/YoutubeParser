@@ -14,12 +14,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class YoutubeController extends AbstractController
 {
     /**
-     * @Route("/", name="app_home" ,methods="GET|POST")
+     * @Route("/", name="app_home" ,methods="GET")
      */
-    public function index(Request $request, EntityManagerInterface $em, YoutubeRepository $youtubeRepository): Response
+    public function index(YoutubeRepository $youtubeRepository): Response
     {
+        return $this->render('youtube/index.html.twig', [
+            'youtubes' => $youtubeRepository->findAll(),
+        ]);
+    }
 
-
+    /**
+     * @Route("/add", name="app_add" ,methods="POST|GET")
+     */
+    public function add(Request $request, EntityManagerInterface $em): Response
+    {
         $youtube = new Youtube();
 
         $form = $this->createForm(YoutubeType::class, $youtube);
@@ -36,9 +44,8 @@ class YoutubeController extends AbstractController
         }
 
 
-        return $this->render('youtube/index.html.twig', [
+        return $this->render('youtube/add.html.twig', [
             'form' => $form->createView(),
-            'youtubes' => $youtubeRepository->findAll(),
         ]);
     }
 

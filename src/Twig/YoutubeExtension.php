@@ -43,6 +43,6 @@ class YoutubeExtension extends AbstractExtension
     public function youtubePlayer($value)
     {
         $video = $this->youtubeParser->parse($value);
-        return $video->getEmbedCode('100%', 500, true, true);
+        return $video->getEmbedCode('100%', 400, true, true);
     }
 }
