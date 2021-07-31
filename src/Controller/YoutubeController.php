@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class YoutubeController extends AbstractController
 {
     /**
-     * @Route("/", name="app_home")
+     * @Route("/", name="app_home" ,methods="GET|POST")
      */
     public function index(Request $request, EntityManagerInterface $em, YoutubeRepository $youtubeRepository): Response
     {
@@ -43,7 +43,7 @@ class YoutubeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_video")
+     * @Route("/video/{id}", name="app_video",methods="GET")
      */
     public function video(Youtube $youtube): Response
     {
@@ -51,5 +51,18 @@ class YoutubeController extends AbstractController
             'name' => $youtube->getName(),
             'url' => $youtube->getUrl(),
         ]);
+    }
+
+
+    /**
+     * @Route("/del", name="delete_all", methods="DELETE|GET")
+     */
+    public function deleteAll(EntityManagerInterface $em): Response
+    {
+        $connection = $em->getConnection();
+        $platform   = $connection->getDatabasePlatform();
+        $connection->executeUpdate($platform->getTruncateTableSQL('youtube'));
+        $connection->exec('ALTER SEQUENCE youtube_id_seq RESTART WITH 1');
+        return $this->redirectToRoute('app_home');
     }
 }

@@ -4,24 +4,39 @@
 {% endblock %}
 
 {% block body %}
+	<style>
+		#thumb:hover {
+			transform: scale(1.1)
+		}
+	</style>
 
 	<h2>Toutes les vidéos</h2>
 	<div class="row row-cols-1 row-cols-md-2 g-4">
 		{% for youtube in youtubes %}
 			<div class="col">
-				<div class="card shadow p-3 mb-5 bg-white rounded">
-					<a href="{{ path('app_video', {'id': youtube.id }) }}"><img src="{{ youtube.url|youtube_thumbnail }}" class="card-img-top"></a>
-					<div class="card-body">
-						<h5 class="card-title">{{ youtube.name }}</h5>
+				<div class="overflow-hidden shadow rounded">
+					<div class="card shadow bg-white rounded" id="thumb">
+						<a href="{{ path('app_video', {'id': youtube.id }) }}"><img src="{{ youtube.url|youtube_thumbnail }}" class="card-img-top"></a>
+						<div class="card-body">
+							<h5 class="card-title text-center">{{ youtube.name }}</h5>
+						</div>
 					</div>
 				</div>
 			</div>
 		{% endfor %}
 	</div>
 
-	<div class="mb-5 mt-5" id="addvideo">
+	<div class="mb-5 mt-5" id="add-video">
 		<h2>Ajouter une vidéo</h2>
 		{{ form(form) }}
 		</div>
+		<a href="#" onclick="event.preventDefault(); confirm('Are you sure ?') && document.getElementById('delete_all_form').submit()" class="btn btn-danger">Delete All ?</a>
+
+		{# For method and CSRF #}
+		<form id="delete_all_form" style="display:none;" action="{{path('delete_all')}}">
+			<input type="hidden" name="_method" value="DELETE">
+			<input type="hidden" name="csrf_token" value="{{csrf_token('delete_all')}}">
+			<input type="submit" value="DELETE">
+		</form>
 
 	{% endblock %}
