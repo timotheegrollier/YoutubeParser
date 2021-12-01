@@ -44,8 +44,8 @@ class YoutubeController extends AbstractController
         }
 
 
-        return $this->render('youtube/add.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('youtube/add.html.twig', [
+            'form' => $form
         ]);
     }
 

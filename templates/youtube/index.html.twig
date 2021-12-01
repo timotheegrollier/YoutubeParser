@@ -16,7 +16,9 @@
 			<div class="col">
 				<div class="card shadow mb-2 p-3 bg-white rounded">
 					<div class="overflow-hidden">
-						<a href="{{ path('app_video', {'id': youtube.id }) }}"><img id="thumb" src="{{ youtube.url|youtube_thumbnail }}" class="card-img-top"></a>
+						{% if 'www.youtube.com/watch?v=' in youtube.url%}
+							<a href="{{ path('app_video', {'id': youtube.id }) }}"><img id="thumb" src="{{ youtube.url|youtube_thumbnail }}" class="card-img-top"></a>
+						{% endif %}
 					</div>
 					<div class="card-body">
 						<h5 class="card-title text-center">{{ youtube.name }}</h5>

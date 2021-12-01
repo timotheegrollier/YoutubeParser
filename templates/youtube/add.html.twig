@@ -3,10 +3,20 @@
 {% block title %}Best Youtube Video !
 {% endblock %}
 
+{% block meta %}
+	<meta name="turbo-cache-control" content="no-cache">
+{% endblock %}
+
 
 {% block body %}
 	<div class="mb-5 mt-5" id="add-video">
 		<h2>Ajouter une vidéo</h2>
-		{{ form(form) }}
+		{{ form_start(form,{attr:{'autocomplete':'off'}}) }}
+		{{ form_widget(form)}}
+		<div class="d-flex justify-content-center">
+			<button type="submit" class="btn btn-primary mt-5" formnovalidate>Envoyer</button>
+
 		</div>
-	{% endblock %}
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
