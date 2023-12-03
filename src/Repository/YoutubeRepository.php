@@ -19,32 +19,11 @@ class YoutubeRepository extends ServiceEntityRepository
         parent::__construct($registry, Youtube::class);
     }
 
-    // /**
-    //  * @return Youtube[] Returns an array of Youtube objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function countAll(): int
     {
         return $this->createQueryBuilder('y')
-            ->andWhere('y.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('y.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('COUNT(y.id)')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getSingleScalarResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Youtube
-    {
-        return $this->createQueryBuilder('y')
-            ->andWhere('y.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

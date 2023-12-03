@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Repository\YoutubeRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -9,11 +10,14 @@ use RicardoFiorani\Matcher\VideoServiceMatcher;
 
 class YoutubeExtension extends AbstractExtension
 {
-    private $youtubeParser;
 
-    public function __construct()
+    private $youtubeParser;
+    private $youtubeRepo;
+
+    public function __construct(YoutubeRepository $youtubeRepository)
     {
         $this->youtubeParser = new VideoServiceMatcher();
+        $this->youtubeRepo = $youtubeRepository;
     }
 
     public function getFilters(): array
@@ -31,7 +35,7 @@ class YoutubeExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('function_name', [$this, 'doSomething']),
+            new TwigFunction('video_count',[$this,'videoCount']),
         ];
     }
 
@@ -47,10 +51,9 @@ class YoutubeExtension extends AbstractExtension
         return $video->getEmbedCode('100%', 400, true, true);
     }
 
-    public function getVideoId(string $url): string
-    {
-    
-        return $this->youtubeParser->parse($url)->videoId;
+
+    public function videoCount(){
+        return $this->youtubeRepo->countAll();
     }
 
     public function viewCount($url) {
@@ -75,4 +78,13 @@ class YoutubeExtension extends AbstractExtension
             return "Nombre de vues non disponible";
         }
     }
+
+
+
+    public function getVideoId(string $url): string
+    {
+    
+        return $this->youtubeParser->parse($url)->videoId;
+    }
+
 }
