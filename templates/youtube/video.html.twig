@@ -6,9 +6,10 @@
 
 
 {% block body %}
-
 	<div class="d-flex flex-column justify-content-center video align-items-center">
 		<h2 class="mb-5">{{ name }}</h2>
+		<p class="d-flex justify-content-center">{{url|youtube_view_count}}
+			vues</p>
 		<div class="col-11 col-sm-8">{{ url|youtube_player|raw }}</div>
 	</div>
 {% endblock %}

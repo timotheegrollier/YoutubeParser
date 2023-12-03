@@ -23,6 +23,7 @@ class YoutubeExtension extends AbstractExtension
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('youtube_thumbnail', [$this, 'youtubeThumbnail']),
+            new TwigFilter('youtube_view_count',[$this,'viewCount']),
             new TwigFilter('youtube_player', [$this, 'youtubePlayer']),
         ];
     }
@@ -44,5 +45,34 @@ class YoutubeExtension extends AbstractExtension
     {
         $video = $this->youtubeParser->parse($value);
         return $video->getEmbedCode('100%', 400, true, true);
+    }
+
+    public function getVideoId(string $url): string
+    {
+    
+        return $this->youtubeParser->parse($url)->videoId;
+    }
+
+    public function viewCount($url) {
+        $apiKey = $_ENV["YT_API"];
+
+        $videoId = $this->getVideoId($url);
+        
+
+        $url = "https://www.googleapis.com/youtube/v3/videos?part=statistics&id={$videoId}&key={$apiKey}";
+    
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    
+        $data = json_decode($response, true);
+    
+    
+        if (isset($data['items'][0]['statistics']['viewCount'])) {
+            return $data['items'][0]['statistics']['viewCount'];
+        } else {
+            return "Nombre de vues non disponible";
+        }
     }
 }
